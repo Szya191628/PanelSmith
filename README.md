@@ -171,7 +171,7 @@ FAKE_VIDEO_FIXTURE_URL=/static/videos/dev_clip.mp4
 │       ├── features/        # comic-workflow 画布、projects、skills
 │       ├── components/      # canvas / chat / panels / settings
 │       └── styles/          # tokens.css（设计契约的唯一真源）
-├── docs/                    # 架构决策（ADR）、前端重设计程序、上游产品对照
+├── docs/                    # 架构决策（ADR）、前端重设计程序、能力清单与路线
 ├── PRODUCT.md               # 用户、定位、品牌与设计原则
 ├── DESIGN.md                # 视觉与交互规格
 ├── CONTEXT.md               # 领域术语表（Director Desk / Cell / Shot Grid …）
