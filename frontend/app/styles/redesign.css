@@ -1,0 +1,127 @@
+/* PanelSmith · comic workbench / autumn 2026
+   Shared surfaces keep the canvas central and the current action legible. */
+
+[data-shell="topbar"] {
+  padding-inline: 1rem;
+  background: oklch(var(--b1));
+  box-shadow: 0 1px 0 oklch(var(--bc) / .06);
+}
+
+[data-shell="topbar"] nav { gap: .25rem; }
+[data-shell="topbar"] nav a { padding-inline: .75rem; }
+[data-shell="topbar"] nav a[aria-current="page"] {
+  box-shadow: inset 0 -2px 0 oklch(var(--p));
+}
+
+[data-shell="page-content"] {
+  gap: 1.5rem;
+  padding-block: 1.5rem 2.5rem;
+}
+
+[data-shell="page-header"] {
+  gap: 1rem;
+  padding-bottom: 1.25rem;
+  border-color: oklch(var(--bc) / .1);
+}
+
+[data-shell="page-header"] > div:first-child > p:first-child {
+  color: var(--primary-ink);
+  font-weight: 700;
+  letter-spacing: .12em;
+}
+
+[data-role="page-title"] {
+  font-size: clamp(1.5rem, 2vw, 1.85rem);
+  letter-spacing: -.025em;
+}
+
+[data-shell="page-header"] [data-role="page-title"] + div { font-size: .75rem; }
+[data-shell="page-header"] > div:first-child > p:last-child:not(:first-child) {
+  margin-top: .45rem;
+  font-size: .875rem;
+  line-height: 1.55;
+}
+
+[data-shell="desk-section"] { gap: .85rem; }
+[data-shell="desk-section"] > div:first-child {
+  padding-bottom: .65rem;
+  border-bottom-width: 1px;
+}
+[data-shell="desk-section"] h2 { font-size: .95rem; }
+
+[data-shell="create-desk"] { gap: 1.5rem; }
+[data-shell="home"] #story-input {
+  min-height: 12rem;
+  padding: 1rem 1.1rem;
+  border-width: 1px;
+  border-color: oklch(var(--bc) / .18);
+  border-radius: 12px;
+  box-shadow: 0 3px 12px oklch(var(--bc) / .04);
+  font-size: .95rem;
+  line-height: 1.8;
+}
+[data-shell="home"] #story-input:focus {
+  border-color: oklch(var(--p));
+  outline: 2px solid oklch(var(--p) / .2);
+  outline-offset: 2px;
+}
+[data-shell="creation-settings"] {
+  padding: 1rem;
+  border: 1px solid oklch(var(--bc) / .08);
+  background: oklch(var(--b2) / .75);
+}
+.creation-settings-heading {
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+  margin-bottom: 1rem;
+  padding-bottom: .85rem;
+  border-bottom: 1px solid oklch(var(--bc) / .1);
+  font-weight: 800;
+}
+.creation-settings-heading small { color: var(--bc-muted); font-size: .75rem; font-weight: 400; }
+[data-shell="creation-settings"] section + section {
+  padding-top: .7rem;
+  border-top: 1px solid oklch(var(--bc) / .08);
+}
+
+[data-shell="projects-list"] article { padding-block: .8rem; }
+[data-shell="projects-list"] article h2 { font-size: .9rem; }
+[data-shell="projects-list"] [aria-label="项目列表"] > div { border-width: 1px; }
+
+[data-shell="stage-pipeline"] {
+  gap: .75rem;
+  padding-inline: 1rem;
+  background: oklch(var(--b2) / .7);
+}
+.workbench-run-status {
+  padding: .35rem .6rem;
+  border: 1px solid oklch(var(--bc) / .08);
+  border-radius: 8px;
+  background: oklch(var(--b1) / .8);
+}
+.workbench-run-status > span:nth-child(2) { font-size: .75rem; }
+[data-shell="stage-pipeline"] nav span[aria-current="step"] { box-shadow: 0 1px 3px oklch(var(--bc) / .12); }
+[data-shell="agent-column"] > div:first-child { padding: .45rem; gap: .35rem; }
+[data-shell="agent-column"] [role="tab"] { min-height: 2.25rem; font-size: .75rem; }
+[data-shell="agent-column"] [role="tab"][aria-selected="true"] { box-shadow: 0 1px 3px oklch(var(--bc) / .12); }
+.workbench-canvas-frame { background: oklch(var(--b2) / .45); }
+
+[data-shell="settings-modal"] .modal-box {
+  border-width: 1px;
+  border-radius: 16px;
+  box-shadow: 0 18px 55px oklch(var(--bc) / .22);
+}
+[data-shell="settings-modal"] .modal-box > div:first-child { padding: 1rem 1.25rem; border-bottom-width: 1px; }
+[data-shell="settings-modal"] [role="tablist"] { gap: .45rem; }
+[data-shell="settings-modal"] [role="tab"] { border-width: 1px; padding-inline: .8rem; }
+
+@media (min-width: 1024px) {
+  [data-shell="create-desk"] { grid-template-columns: minmax(0, 1fr) 17rem; }
+}
+@media (max-width: 639px) {
+  [data-shell="page-content"] { padding: 1rem .9rem 2rem; }
+  [data-shell="topbar"], [data-shell="stage-pipeline"] { padding-inline: .5rem; }
+  .workbench-run-status { padding-inline: .35rem; }
+  .workbench-run-status [role="progressbar"] { display: none; }
+}

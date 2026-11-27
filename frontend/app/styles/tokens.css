@@ -1,0 +1,189 @@
+/**
+ * Design Contract — executable source of truth (ADR 0002).
+ * Density: Dense Comic Workbench (D2). Docs: DESIGN.md updated same PR.
+ */
+
+@layer base {
+  :root {
+    /* —— Brand plates (CMYK registration, theme-aware) —— */
+    --cmyk-cyan: 0.55 0.14 180;
+    --cmyk-magenta: 0.55 0.26 330;
+
+    /* —— Text contrast tokens (theme-aware) ——
+     * 同一语义在两套主题达到同一对比目标，而不是同一 alpha 数值。
+     * muted: 次级正文/元信息，全部 base 表面 ≥4.5:1
+     * subtle: 纯装饰标签，≥3:1
+     * primary-ink: 品牌黄作为「文字」的形态；填充色继续用 --p
+     */
+    --bc-muted: oklch(var(--bc) / 0.72);
+    --bc-subtle: oklch(var(--bc) / 0.55);
+    --primary-ink: #7a5a00;
+
+    /* —— Spacing (dense default; use for new chrome) —— */
+    --space-0: 0;
+    --space-1: 0.25rem; /* 4 */
+    --space-2: 0.5rem; /* 8 */
+    --space-3: 0.75rem; /* 12 */
+    --space-4: 1rem; /* 16 */
+    --space-5: 1.25rem; /* 20 */
+    --space-6: 1.5rem; /* 24 */
+    --space-8: 2rem; /* 32 */
+    --space-10: 2.5rem; /* 40 */
+    --space-12: 3rem; /* 48 */
+
+    /* Legacy aliases (keep call sites working) */
+    --space-xs: var(--space-1);
+    --space-sm: var(--space-2);
+    --space-md: var(--space-4);
+    --space-lg: var(--space-6);
+    --space-xl: var(--space-8);
+    --space-2xl: var(--space-12);
+
+    /* —— Type scale (dense desk; display stays splash-only) —— */
+    --text-2xs: 0.625rem; /* 10 — mono labels */
+    --text-xs: 0.75rem; /* 12 */
+    --text-sm: 0.8125rem; /* 13 */
+    --text-base: 0.875rem; /* 14 body on desk */
+    --text-md: 1rem; /* 16 */
+    --text-lg: 1.125rem; /* 18 */
+    --text-xl: 1.25rem; /* 20 */
+    --text-display: clamp(1.5rem, 4vw, 2.5rem);
+
+    --leading-tight: 1.15;
+    --leading-snug: 1.35;
+    --leading-normal: 1.5;
+
+    /* —— Radius —— */
+    --radius-sm: 6px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+
+    /* —— Borders —— */
+    --border-thin: 1px;
+    --border-medium: 2px;
+    --border-thick: 3px;
+
+    /* —— Touch —— */
+    --touch-target-min: 44px; /* primary actions, WCAG-friendly */
+    --touch-target-dense: 32px; /* chrome chips only; not sole target for critical ops */
+
+    /* —— Vertical rhythm（页面纵向节奏三档：区块间 > 块间 > 条目间）——
+     * 单一 gap 铺到底没有节奏；相关元素紧凑、独立区块宽松。
+     */
+    --rhythm-zone: 1.25rem; /* 20 — DeskSection 之间 */
+    --rhythm-block: var(--space-3); /* 12 — 区块内部块间 */
+    --rhythm-item: var(--space-2); /* 8 — 兄弟条目间 */
+
+    /* —— Motion —— */
+    --duration-fast: 150ms;
+    --duration-normal: 200ms;
+    --duration-slow: 300ms;
+
+    /* —— Workbench Shell geometry (viewport-locked desk) —— */
+    --workbench-header: 2.75rem; /* TopBar */
+    --workbench-toolbar: 2.75rem; /* StagePipeline */
+    --workbench-sidebar: 18rem; /* Agent Column */
+    --workbench-sidebar-collapsed: 2.75rem;
+    --workbench-chrome-total: calc(
+      var(--workbench-header) + var(--workbench-toolbar)
+    );
+
+    /* —— Canvas / Shot Grid density —— */
+    --canvas-gap-section: 3rem;
+    --canvas-gap-card: 0.875rem;
+    --canvas-frame-pad: 1.25rem;
+    --canvas-frame-header: 3.5rem;
+    --shot-card-w: 13.75rem; /* 220 */
+    --shot-card-h: 18.75rem; /* 300 */
+    --shot-grid-columns: 3;
+
+    /* —— Z-Index —— */
+    --z-dropdown: 10;
+    --z-sticky: 20;
+    --z-fixed: 30;
+    --z-modal-backdrop: 40;
+    --z-modal: 50;
+    --z-popover: 60;
+    --z-tooltip: 70;
+  }
+
+  [data-theme="doodle-dark"] {
+    --cmyk-cyan: 0.6 0.12 195;
+    --cmyk-magenta: 0.6 0.24 340;
+    --bc-muted: oklch(var(--bc) / 0.62);
+    --bc-subtle: oklch(var(--bc) / 0.45);
+    --primary-ink: #f0c050;
+  }
+
+  /* 触屏下密集档自动升到无障碍下限；桌面密集布局不受影响 */
+  @media (pointer: coarse) {
+    :root {
+      --touch-target-dense: 44px;
+    }
+  }
+}
+
+@layer utilities {
+  .touch-target {
+    min-width: var(--touch-target-min);
+    min-height: var(--touch-target-min);
+  }
+
+  .touch-target-dense {
+    min-width: var(--touch-target-dense);
+    min-height: var(--touch-target-dense);
+  }
+
+  /* Viewport-locked page root (prefer PageShell component) */
+  .page-shell {
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    max-height: 100dvh;
+    overflow: hidden;
+  }
+
+  .page-body {
+    flex: 1 1 0%;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+  }
+
+  /* Dense chrome rows (TopBar / StagePipeline) */
+  .chrome-row,
+  .chrome-toolbar {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+  }
+
+  .chrome-row {
+    height: var(--workbench-header);
+    max-height: var(--workbench-header);
+  }
+
+  .chrome-toolbar {
+    height: var(--workbench-toolbar);
+    max-height: var(--workbench-toolbar);
+  }
+
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .brutal-hover {
+    transition-property: box-shadow, transform;
+    transition-duration: var(--duration-normal);
+  }
+
+  .brutal-hover:hover {
+    @apply shadow-brutal-lg -translate-x-0.5 -translate-y-0.5;
+  }
+
+  .brutal-hover:active {
+    @apply shadow-brutal translate-x-0 translate-y-0;
+  }
+}

@@ -1,0 +1,5 @@
+# Local override.
+services:
+  backend:
+    environment:
+      WEB_CONCURRENCY: "1"
